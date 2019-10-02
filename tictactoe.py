@@ -36,14 +36,19 @@ while True:
     while True:
         human = int(input("your turn (1-9): "))-1
         if human in track:
-            print("you entered position! try again.")
+            print("you entered invalid position! try again.")
             break
         track.append(human)
         tic[human] = -1
         os.system("cls")
         pprint(tic) #print
         depth = len([i for i in tic if i == 0]) #human turn
-        tic[minimax(tic, depth, +1)[0]] = 1     #computer turn
+        comp_move = minimax(tic, depth, +1)[0]
+        if comp_move in track:
+            print("you entered invalid position! try again.")
+            break
+        track.append(comp_move)
+        tic[comp_move] = 1     #computer turn
         os.system("cls")
         pprint(tic) #print
         if minimax.check(+1)==True:
