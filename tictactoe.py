@@ -32,8 +32,14 @@ def pprint(tic): #printing function for simple view.
 
 pprint(tic)
 while True:
+    track= []
     while True:
-        tic[int(input("your turn (1-9): "))-1] = -1
+        human = int(input("your turn (1-9): "))-1
+        if human in track:
+            print("you entered position! try again.")
+            break
+        track.append(human)
+        tic[human] = -1
         os.system("cls")
         pprint(tic) #print
         depth = len([i for i in tic if i == 0]) #human turn
