@@ -51,7 +51,7 @@ while True:
             break
     if input("do you want to try again (y/n)? : ") == "y":
         os.system("cls")
-        pprint(tic)
         tic =[0 for i in range(9)]
+        pprint(tic)
         continue
     else:break
