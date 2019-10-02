@@ -8,7 +8,7 @@ def minimax(state, depth, player):#ِplayers:(Ai: +1 & human: -1) #best move sel
     wins  =((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)) #wins combinations
     empties = [i for i,j in enumerate(state) if j==0] #empty cells 
     win =lambda player: any(map(lambda w: state[w[0]]==state[w[1]]==state[w[2]]==player, wins))
-    minimax.check = win
+    minimax.check = win #end slot.
     if depth == 0 or win(+1) or win(-1):
         evaluate = 1 if win(+1) else -1 if win(-1) else 0
         return [-1, evaluate]
