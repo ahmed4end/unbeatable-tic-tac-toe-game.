@@ -5,7 +5,7 @@ tic =[0,0,0,
 
 def minimax(state, depth, player):#ِplayers:(Ai: +1 & human: -1) #best move selector function.
     best = [-1, -float("inf")] if player== +1 else [-1, +float("inf")] #<<human
-    wins  =((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)) #wins combinations
+    wins  =((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)) #wining combinations
     empties = [i for i,j in enumerate(state) if j==0] #empty cells 
     win =lambda player: any(map(lambda w: state[w[0]]==state[w[1]]==state[w[2]]==player, wins))
     minimax.check = win #end slot.
