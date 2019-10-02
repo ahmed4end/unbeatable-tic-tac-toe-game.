@@ -33,7 +33,7 @@ def pprint(tic): #printing function for simple view.
 pprint(tic)
 while True:
     while True:
-        tic[int(input("your turn: "))] = -1
+        tic[int(input("your turn (1-9): "))-1] = -1
         os.system("cls")
         pprint(tic) #print
         depth = len([i for i in tic if i == 0]) #human turn
