@@ -40,7 +40,9 @@ while True:
     track= []
     while True:
         while True:
-            human = int(input("your turn (1-9): "))-1
+            try:
+            	human = int(input("your turn (1-9): "))-1
+            except:human=0
             if human in track or human not in range(0,9): #input handling.
                 input("you entered invalid position, choose another!")
                 os.system("cls")
