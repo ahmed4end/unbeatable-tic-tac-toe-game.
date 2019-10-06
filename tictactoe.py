@@ -1,27 +1,31 @@
-import os
 tic =[0,0,0,
       0,0,0,
       0,0,0]
 
-def minimax(state, depth, player):#ِplayers:(Ai: +1 & human: -1) #best move selector function.
-    best = [-1, -float("inf")] if player== +1 else [-1, +float("inf")] #<<human
-    wins  =((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)) #wining combinations
-    empties = [i for i,j in enumerate(state) if j==0] #empty cells 
-    win =lambda player: any(map(lambda w: state[w[0]]==state[w[1]]==state[w[2]]==player, wins))
-    minimax.check = win #end slot.
-    if depth == 0 or win(+1) or win(-1):
-        evaluate = 1 if win(+1) else -1 if win(-1) else 0
-        return [-1, evaluate]
-    for cell in empties: 
-        state[cell] = player
-        score = minimax(state, depth - 1, -player) #recursion core
-        state[cell] = 0
-        score[0] = cell 
-        if player == +1: best = score if score[1] > best[1] else best  #maximizing
-        else:            best = score if score[1] < best[1] else best  #minimizing
-    return best
+################## AI(computer) best move handling ##################
 
-############## user interface handling ##################
+def minimax(state, depth, alpha=-float('inf'), beta=float('inf'), player=+1):
+	best = [-1, -float("inf")] if player == +1 else [-1, +float("inf")]  #best move and score container.
+	wins = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))  #wining cominations.
+	win = lambda player: any(map(lambda w: state[w[0]]==state[w[1]]==state[w[2]]==player, wins))  #simple winning checker function.
+	minimax.check = win #end slot.
+	if depth ==0 or win(+1) or win(-1):return [-1, 1 if win(+1) else -1 if win(-1) else 0]  #last branches determiner.
+	for cell in [i for i,j in enumerate(state) if j==0]:  #tree view loop.
+		state[cell] = player  #move ahead.
+		score = minimax(state, depth-1, alpha, beta, -player) #recrusion & backtracking core.
+		state[cell] = 0   #move backward
+		score[0] = cell   #adding cell position to the score container.
+		if player==+1: #maximizing for player +1 (computer).
+			best = score if score[1] > best[1] else best #taking maximum value.
+			alpha = max(alpha, best[1])  #alpha-beta turn, taking maximum value.
+			if alpha >= beta:break #stop exploring branches if alpha finally >= beta.
+		else:
+			best = score if score[1] < best[1] else best #taking minimum value.
+			beta = min(beta, best[1])  #alpha-beta turn, taking minimum value.
+			if alpha >= beta:break  #stop exploring branches if alpha finally >= beta.
+	return best
+
+################## user interface handling (demo) ##################
 
 def pprint(tic): #printing function for simple view.
     result = []
@@ -31,24 +35,25 @@ def pprint(tic): #printing function for simple view.
     print("\n".join(result))
 
 pprint(tic)
+import os #to clear screen after each move.
 while True:
     track= []
     while True:
-        human = int(input("your turn (1-9): "))-1
-        if human in track:
-            print("you entered invalid position! try again.")
-            break
+        while True:
+            human = int(input("your turn (1-9): "))-1
+            if human in track or human not in range(1,10): #input handling.
+                input("you entered invalid position, choose another!")
+                os.system("cls")
+                pprint(tic)
+            else:break
         track.append(human)
         tic[human] = -1
         os.system("cls")
-        pprint(tic) #print
-        depth = len([i for i in tic if i == 0]) #human turn
-        comp_move = minimax(tic, depth, +1)[0]
-        if comp_move in track:
-            print("you entered invalid position! try again.")
-            break
-        track.append(comp_move)
-        tic[comp_move] = 1     #computer turn
+        pprint(tic)
+        depth = len([i for i in tic if i == 0])
+        ai_move = minimax(tic, depth)[0]
+        track.append(ai_move)
+        tic[ai_move] = 1     #computer turn
         os.system("cls")
         pprint(tic) #print
         if minimax.check(+1)==True:
@@ -60,7 +65,7 @@ while True:
         elif depth == 0:
             print("draw!, you can't win!.")
             break
-    if input("do you want to try again (y/n)? : ") == "y":
+    if not input("press any key to try again!, or (n) to quit.") == "n":
         os.system("cls")
         tic =[0 for i in range(9)]
         pprint(tic)
