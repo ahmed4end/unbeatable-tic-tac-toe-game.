@@ -41,7 +41,7 @@ while True:
     while True:
         while True:
             human = int(input("your turn (1-9): "))-1
-            if human in track or human not in range(1,10): #input handling.
+            if human in track or human not in range(0,9): #input handling.
                 input("you entered invalid position, choose another!")
                 os.system("cls")
                 pprint(tic)
